@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful | Museum Ticketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a1a;
+            --text: #f0f0ff;
+            --muted: #a0a0c0;
+            --green: #22c55e;
+            --accent: #7c5cfc;
+            --border: rgba(124, 92, 252, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.08) 0%, var(--bg) 60%);
+        }
+
+        .card {
+            text-align: center;
+            padding: 60px 40px;
+            max-width: 500px;
+        }
+
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 3.5rem;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 40px rgba(34, 197, 94, 0.2);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--green);
+            margin-bottom: 12px;
+            animation: fadeUp 0.6s 0.3s both;
+        }
+
+        p {
+            color: var(--muted);
+            margin-bottom: 24px;
+            line-height: 1.6;
+            animation: fadeUp 0.6s 0.4s both;
+        }
+
+        .booking-id {
+            background: rgba(124, 92, 252, 0.1);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            animation: fadeUp 0.6s 0.5s both;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--green);
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s 0.6s both;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s 0.7s both;
+        }
+
+        a,
+        .action-btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #7c5cfc, #5ce0d8);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        a:hover,
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 92, 252, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="checkmark">✅</div>
+        <h1>Payment Successful!</h1>
+        <p>Your museum tickets have been confirmed. Return to the chat to receive your QR code ticket.</p>
+        <div class="booking-id" id="bookingId">Loading...</div>
+        <div class="status-text" id="statusText">✓ Confirming your booking...</div>
+        <div class="buttons">
+            <a href="/">← Return to Museum</a>
+        </div>
+    </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const bookingId = params.get('booking_id') || 'N/A';
+        const sessionId = params.get('session_id') || null;
+
+        document.getElementById('bookingId').textContent = `Booking: ${bookingId}`;
+
+        // Auto-confirm via API
+        async function confirmPayment() {
+            if (bookingId === 'N/A') return;
+
+            try {
+                let url = `/api/payment/confirm/${bookingId}`;
+                if (sessionId) url += `?session_id=${sessionId}`;
+
+                const res = await fetch(url, { method: 'POST' });
+                const data = await res.json();
+
+                if (data.success) {
+                    document.getElementById('statusText').textContent = '✓ Booking confirmed! QR ticket generated.';
+
+                    // Notify parent window if opened as popup
+                    if (window.opener) {
+                        window.opener.postMessage({
+                            type: 'payment_complete',
+                            bookingId: bookingId,
+                            success: true,
+                        }, '*');
+                    }
+                } else {
+                    document.getElementById('statusText').textContent = '⚠️ Auto-confirm failed. Please tell the chatbot you paid.';
+                }
+            } catch (e) {
+                document.getElementById('statusText').textContent = '⚠️ Connection error. Please return to chat and type "paid".';
+                console.log('Auto-confirm error:', e);
+            }
+        }
+
+        confirmPayment();
+    </script>
+</body>
+
+</html>

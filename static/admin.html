@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Museum Ticketing Admin Dashboard - Analytics, bookings, and exhibition management">
+    <title>Admin Dashboard | Museum Ticketing Bot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/admin.css">
+</head>
+
+<body>
+    <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">🏛️</span>
+            <h2>Museum Admin</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="sidebar-link active" data-tab="dashboard" onclick="switchTab('dashboard')">
+                <span class="sidebar-icon">📊</span> Dashboard
+            </a>
+            <a href="#" class="sidebar-link" data-tab="bookings" onclick="switchTab('bookings')">
+                <span class="sidebar-icon">🎫</span> Bookings
+            </a>
+            <a href="#" class="sidebar-link" data-tab="exhibitions" onclick="switchTab('exhibitions')">
+                <span class="sidebar-icon">🎨</span> Exhibitions
+            </a>
+            <a href="#" class="sidebar-link" data-tab="analytics" onclick="switchTab('analytics')">
+                <span class="sidebar-icon">📈</span> Analytics
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/" class="sidebar-link">
+                <span class="sidebar-icon">💬</span> Chat Widget
+            </a>
+            <a href="/docs" class="sidebar-link" target="_blank">
+                <span class="sidebar-icon">📚</span> API Docs
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+    <main class="main-content">
+        <!-- ── Header ── -->
+        <header class="main-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                <h1 id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <span class="header-time" id="headerTime"></span>
+                <button class="header-refresh" onclick="refreshData()" title="Refresh">🔄</button>
+            </div>
+        </header>
+
+        <!-- ═══ DASHBOARD TAB ═══ -->
+        <div class="tab-content active" id="tab-dashboard">
+            <!-- Metric Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card metric-purple">
+                    <div class="metric-icon">🎫</div>
+                    <div class="metric-body">
+                        <span class="metric-value" id="totalBookings">0</span>
+                        <span class="metric-label">Total Bookings</span>
+                    </div>
+                    <div class="metric-trend up">↑ All time</div>
+                </div>
+                <div class="metric-card metric-green">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-body">
+                        <span class="metric-value" id="totalRevenue">₹0</span>
+                        <span class="metric-label">Total Revenue</span>
+                    </div>
+                    <div class="metric-trend up">↑ All time</div>
+                </div>
+                <div class="metric-card metric-blue">
+                    <div class="metric-icon">📅</div>
+                    <div class="metric-body">
+                        <span class="metric-value" id="todayTickets">0</span>
+                        <span class="metric-label">Today's Tickets</span>
+                    </div>
+                    <div class="metric-trend neutral">Today</div>
+                </div>
+                <div class="metric-card metric-orange">
+                    <div class="metric-icon">💬</div>
+                    <div class="metric-body">
+                        <span class="metric-value" id="activeSessions">0</span>
+                        <span class="metric-label">Active Chats</span>
+                    </div>
+                    <div class="metric-trend neutral">Last 30 min</div>
+                </div>
+            </div>
+
+            <!-- Status Cards -->
+            <div class="status-grid">
+                <div class="status-card">
+                    <h3>Booking Status</h3>
+                    <div class="status-items">
+                        <div class="status-item">
+                            <span class="status-dot status-confirmed"></span>
+                            <span>Confirmed</span>
+                            <span class="status-count" id="confirmedCount">0</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot status-pending"></span>
+                            <span>Pending</span>
+                            <span class="status-count" id="pendingCount">0</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot status-cancelled"></span>
+                            <span>Cancelled</span>
+                            <span class="status-count" id="cancelledCount">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-card">
+                    <h3>Today's Revenue</h3>
+                    <div class="revenue-display">
+                        <span class="revenue-amount" id="todayRevenue">₹0</span>
+                        <div class="revenue-bar">
+                            <div class="revenue-bar-fill" id="revenueBarFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Area -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>📊 Ticket Type Distribution</h3>
+                    <div class="chart-bars" id="ticketTypeChart">
+                        <p class="chart-loading">Loading...</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>👥 Visitor Demographics</h3>
+                    <div class="chart-bars" id="demographicsChart">
+                        <p class="chart-loading">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Trends -->
+            <div class="chart-card full-width">
+                <h3>📈 Daily Booking Trends (Last 30 Days)</h3>
+                <div class="trend-chart" id="dailyTrendChart">
+                    <p class="chart-loading">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ BOOKINGS TAB ═══ -->
+        <div class="tab-content" id="tab-bookings">
+            <div class="table-header">
+                <h3>Recent Bookings</h3>
+                <button class="table-refresh-btn" onclick="loadRecentBookings()">🔄 Refresh</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Visitor</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Tickets</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <tr>
+                            <td colspan="8" class="table-empty">Loading bookings...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ═══ EXHIBITIONS TAB ═══ -->
+        <div class="tab-content" id="tab-exhibitions">
+            <div class="table-header">
+                <h3>Manage Exhibitions</h3>
+                <button class="add-btn" onclick="showAddExhibition()">+ Add Exhibition</button>
+            </div>
+
+            <!-- Add Exhibition Form (hidden by default) -->
+            <div class="form-card" id="addExhibitionForm" style="display:none;">
+                <h4>New Exhibition</h4>
+                <form onsubmit="createExhibition(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="exName" required placeholder="Exhibition name">
+                        </div>
+                        <div class="form-group">
+                            <label>Ticket Price (₹)</label>
+                            <input type="number" id="exPrice" required placeholder="150">
+                        </div>
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" id="exStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" id="exEndDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Daily Capacity</label>
+                            <input type="number" id="exCapacity" value="500" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Show Times (comma-separated, optional)</label>
+                            <input type="text" id="exShowTimes" placeholder="10:00 AM, 2:00 PM, 6:00 PM">
+                        </div>
+                        <div class="form-group full">
+                            <label>Description</label>
+                            <textarea id="exDescription" required placeholder="Exhibition description..."
+                                rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="exSpecial">
+                                Special Exhibition
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="hideAddExhibition()">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Exhibition</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="exhibitions-admin-grid" id="exhibitionsAdminGrid">
+                <p class="chart-loading">Loading exhibitions...</p>
+            </div>
+        </div>
+
+        <!-- ═══ ANALYTICS TAB ═══ -->
+        <div class="tab-content" id="tab-analytics">
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>🌍 Language Distribution</h3>
+                    <div class="chart-bars" id="languageChart">
+                        <p class="chart-loading">Loading...</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>🏆 Exhibition Popularity</h3>
+                    <div class="chart-bars" id="exhibitionPopChart">
+                        <p class="chart-loading">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-card full-width">
+                <h3>⏰ Hourly Traffic (Today)</h3>
+                <div class="trend-chart" id="hourlyChart">
+                    <p class="chart-loading">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/admin.js"></script>
+</body>
+
+</html>

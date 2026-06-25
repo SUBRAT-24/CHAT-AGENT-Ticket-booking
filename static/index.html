@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="National Heritage Museum - Book tickets instantly through our AI-powered chatbot. Gate entry, exhibitions, shows, guided tours and combo packages available.">
+    <title>National Heritage Museum | AI Ticket Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- ═══════════════════ HERO SECTION ═══════════════════ -->
+    <section class="hero-section" id="hero">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-overlay"></div>
+        <nav class="hero-nav">
+            <div class="nav-logo">
+                <span class="logo-icon">🏛️</span>
+                <span class="logo-text">National Heritage Museum</span>
+            </div>
+            <div class="nav-links">
+                <a href="#exhibitions" class="nav-link">Exhibitions</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="/admin" class="nav-link nav-admin">Admin Panel</a>
+            </div>
+        </nav>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="hero-title-line">Discover History,</span>
+                <span class="hero-title-line hero-title-accent">Book Instantly</span>
+            </h1>
+            <p class="hero-subtitle">Experience the future of museum ticketing. Our AI-powered chatbot handles your entire booking in seconds — from gate entry to exclusive exhibitions.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="statVisitors">50K+</span>
+                    <span class="stat-label">Happy Visitors</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Exhibitions</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Languages</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Available</span>
+                </div>
+            </div>
+            <button class="hero-cta" id="openChatBtn" onclick="toggleChat()">
+                <span class="cta-icon">💬</span>
+                Book Tickets Now
+                <span class="cta-arrow">→</span>
+            </button>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span>Scroll to explore</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ FEATURES SECTION ═══════════════════ -->
+    <section class="features-section" id="features">
+        <div class="section-container">
+            <h2 class="section-title">Why Choose Our AI Booking?</h2>
+            <p class="section-subtitle">Skip the queues. Book smarter. Experience more.</p>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Powered Chat</h3>
+                    <p>Natural conversation in 8+ languages. Just tell our bot what you need.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-delay="100">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Booking</h3>
+                    <p>Complete your booking in under 60 seconds. No forms, no waiting.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-delay="200">
+                    <div class="feature-icon">🎫</div>
+                    <h3>QR Code Tickets</h3>
+                    <p>Get digital QR tickets instantly. Just scan at the entrance. No printing needed.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-delay="300">
+                    <div class="feature-icon">💳</div>
+                    <h3>Secure Payment</h3>
+                    <p>Stripe-powered secure transactions. Pay with cards, UPI, or wallets.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-delay="400">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Multilingual</h3>
+                    <p>Chat in English, Hindi, Spanish, French, German, Japanese, Chinese & more.</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-delay="500">
+                    <div class="feature-icon">📊</div>
+                    <h3>Smart Deals</h3>
+                    <p>Auto-suggests combo packages and discounts for the best value.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ EXHIBITIONS SECTION ═══════════════════ -->
+    <section class="exhibitions-section" id="exhibitions">
+        <div class="section-container">
+            <h2 class="section-title">Current Exhibitions</h2>
+            <p class="section-subtitle">Explore our world-class exhibitions and shows</p>
+            <div class="exhibitions-grid" id="exhibitionsGrid">
+                <!-- Populated by JS -->
+                <div class="exhibition-skeleton"></div>
+                <div class="exhibition-skeleton"></div>
+                <div class="exhibition-skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ PRICING SECTION ═══════════════════ -->
+    <section class="pricing-section" id="pricing">
+        <div class="section-container">
+            <h2 class="section-title">Ticket Pricing</h2>
+            <p class="section-subtitle">Transparent pricing with special discounts</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-icon">🚶</div>
+                    <h3>Gate Entry</h3>
+                    <div class="pricing-amount">₹50</div>
+                    <span class="pricing-per">per adult</span>
+                    <ul class="pricing-features">
+                        <li>✓ Museum access</li>
+                        <li>✓ Permanent galleries</li>
+                        <li>✓ Garden & cafeteria</li>
+                        <li>✗ Special exhibitions</li>
+                        <li>✗ Guided tours</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="toggleChat()">Book Now</button>
+                </div>
+                <div class="pricing-card pricing-card-featured">
+                    <div class="pricing-badge pricing-badge-gold">Best Value</div>
+                    <div class="pricing-icon">🎁</div>
+                    <h3>Combo Package</h3>
+                    <div class="pricing-amount">₹255<span class="pricing-original">₹300</span></div>
+                    <span class="pricing-per">15% OFF!</span>
+                    <ul class="pricing-features">
+                        <li>✓ Museum access</li>
+                        <li>✓ Permanent galleries</li>
+                        <li>✓ 1 Special exhibition</li>
+                        <li>✓ Expert guided tour</li>
+                        <li>✓ Priority entry</li>
+                    </ul>
+                    <button class="pricing-btn pricing-btn-gold" onclick="toggleChat()">Book Combo</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-badge">For Groups</div>
+                    <div class="pricing-icon">🗣️</div>
+                    <h3>Guided Tour</h3>
+                    <div class="pricing-amount">₹150</div>
+                    <span class="pricing-per">per adult</span>
+                    <ul class="pricing-features">
+                        <li>✓ Museum access</li>
+                        <li>✓ Permanent galleries</li>
+                        <li>✓ Expert guide (2hrs)</li>
+                        <li>✓ Behind-the-scenes</li>
+                        <li>✗ Special exhibitions</li>
+                    </ul>
+                    <button class="pricing-btn" onclick="toggleChat()">Book Tour</button>
+                </div>
+            </div>
+            <div class="pricing-categories">
+                <h4>Category-Based Pricing (Gate Entry)</h4>
+                <div class="category-badges">
+                    <span class="cat-badge">👶 Child: ₹20</span>
+                    <span class="cat-badge">🎓 Student: ₹30</span>
+                    <span class="cat-badge">👨 Adult: ₹50</span>
+                    <span class="cat-badge">👴 Senior: ₹25</span>
+                    <span class="cat-badge">🌍 Foreign: ₹200</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ CHAT WIDGET ═══════════════════ -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header" id="chatHeader">
+            <div class="chat-header-left">
+                <div class="chat-avatar">
+                    <span>🏛️</span>
+                    <div class="chat-status-dot"></div>
+                </div>
+                <div class="chat-header-info">
+                    <h3>Heritage Guide</h3>
+                    <span class="chat-online">Online • AI Assistant</span>
+                </div>
+            </div>
+            <div class="chat-header-actions">
+                <button class="chat-action-btn" id="chatLangBtn" title="Language" onclick="showLanguageSelector()">🌐</button>
+                <button class="chat-action-btn" id="chatMinBtn" title="Minimize" onclick="toggleChat()">─</button>
+                <button class="chat-action-btn" id="chatCloseBtn" title="Close" onclick="closeChat()">✕</button>
+            </div>
+        </div>
+
+        <!-- Language selector dropdown -->
+        <div class="language-selector" id="languageSelector">
+            <button class="lang-option" data-lang="en" onclick="selectLanguage('en')">🇬🇧 English</button>
+            <button class="lang-option" data-lang="hi" onclick="selectLanguage('hi')">🇮🇳 हिंदी</button>
+            <button class="lang-option" data-lang="es" onclick="selectLanguage('es')">🇪🇸 Español</button>
+            <button class="lang-option" data-lang="fr" onclick="selectLanguage('fr')">🇫🇷 Français</button>
+            <button class="lang-option" data-lang="de" onclick="selectLanguage('de')">🇩🇪 Deutsch</button>
+            <button class="lang-option" data-lang="ja" onclick="selectLanguage('ja')">🇯🇵 日本語</button>
+            <button class="lang-option" data-lang="zh" onclick="selectLanguage('zh')">🇨🇳 中文</button>
+            <button class="lang-option" data-lang="ar" onclick="selectLanguage('ar')">🇸🇦 العربية</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages populated by JS -->
+        </div>
+
+        <!-- QR Code display area -->
+        <div class="qr-display" id="qrDisplay" style="display: none;">
+            <div class="qr-card">
+                <h4>🎫 Your QR Ticket</h4>
+                <img id="qrImage" src="" alt="QR Code Ticket">
+                <p id="qrBookingId"></p>
+                <button class="qr-close-btn" onclick="hideQR()">Close</button>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <div class="chat-quick-actions" id="quickActions">
+                <button class="quick-btn" onclick="sendQuickMessage('Book tickets')">🎫 Book</button>
+                <button class="quick-btn" onclick="sendQuickMessage('View exhibitions')">🎨 Exhibitions</button>
+                <button class="quick-btn" onclick="sendQuickMessage('Check pricing')">💰 Pricing</button>
+                <button class="quick-btn" onclick="sendQuickMessage('Help')">❓ Help</button>
+            </div>
+            <div class="chat-input-wrapper">
+                <input type="text" id="chatInput" placeholder="Type your message..." autocomplete="off" onkeypress="handleKeyPress(event)">
+                <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ CHAT TOGGLE BUTTON ═══════════════════ -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">
+        <span class="chat-toggle-icon" id="chatToggleIcon">💬</span>
+        <span class="chat-toggle-badge" id="chatBadge" style="display:none;">1</span>
+        <div class="chat-toggle-pulse"></div>
+    </button>
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">🏛️</span>
+                <span>National Heritage Museum</span>
+            </div>
+            <div class="footer-links">
+                <span>AI-Powered Ticketing</span>
+                <span>•</span>
+                <span>Open Daily 9AM - 8PM</span>
+                <span>•</span>
+                <span>📞 +91-11-2345-6789</span>
+            </div>
+            <div class="footer-copy">© 2026 National Heritage Museum. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

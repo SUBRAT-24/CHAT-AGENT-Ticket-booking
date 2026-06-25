@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Demo | Museum Ticketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a1a;
+            --card: rgba(20, 20, 50, 0.8);
+            --accent: #7c5cfc;
+            --green: #22c55e;
+            --text: #f0f0ff;
+            --muted: #a0a0c0;
+            --border: rgba(124, 92, 252, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 30%, rgba(124, 92, 252, 0.1) 0%, var(--bg) 60%);
+        }
+
+        .payment-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px 40px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5);
+        }
+
+        .payment-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: var(--muted);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        .amount {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7c5cfc, #5ce0d8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .booking-id {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
+
+        .booking-id code {
+            background: rgba(124, 92, 252, 0.15);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .card-form {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(160, 160, 192, 0.5);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pay-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+        }
+
+        .pay-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cancel-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--muted);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .success-view {
+            display: none;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 16px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-view h2 {
+            color: var(--green);
+            margin-bottom: 12px;
+        }
+
+        .success-view p {
+            margin-bottom: 16px;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #7c5cfc, #5ce0d8);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .return-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 92, 252, 0.3);
+        }
+
+        .progress-bar {
+            display: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: 4px;
+            transition: width 2s ease;
+        }
+
+        .secure {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="payment-card">
+        <!-- Payment Form View -->
+        <div id="paymentView">
+            <div class="payment-icon">🏛️</div>
+            <h1>Museum Ticket Payment</h1>
+            <p>Complete your payment securely</p>
+            <div class="amount" id="payAmount">₹0</div>
+            <div class="booking-id">Booking: <code id="payBookingId">-</code></div>
+
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="card-form">
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242" maxlength="19">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry</label>
+                        <input type="text" placeholder="12/28" value="12/28" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" placeholder="123" value="123" maxlength="3">
+                    </div>
+                </div>
+            </div>
+
+            <button class="pay-btn" id="payBtn" onclick="simulatePayment()">
+                💳 Pay Now (Demo)
+            </button>
+            <button class="cancel-btn" onclick="cancelPayment()">Cancel Payment</button>
+
+            <div class="secure">🔒 This is a demo payment page. No real charges will be made.</div>
+        </div>
+
+        <!-- Success View -->
+        <div class="success-view" id="successView">
+            <div class="success-icon">🎉</div>
+            <h2>Payment Successful!</h2>
+            <p>Your museum tickets have been confirmed. Return to the chat to receive your QR code ticket.</p>
+            <div class="booking-id">Booking: <code id="successBookingId">-</code></div>
+            <br>
+            <button class="return-btn" onclick="returnToChat()">← Return to Chat</button>
+        </div>
+    </div>
+
+    <script>
+        // Parse URL params
+        const params = new URLSearchParams(window.location.search);
+        const bookingId = params.get('booking_id') || 'DEMO';
+        const amount = params.get('amount') || '0';
+
+        document.getElementById('payBookingId').textContent = bookingId;
+        document.getElementById('successBookingId').textContent = bookingId;
+        document.getElementById('payAmount').textContent = `₹${parseFloat(amount).toLocaleString()}`;
+
+        async function simulatePayment() {
+            const btn = document.getElementById('payBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Processing Payment...';
+            progressBar.style.display = 'block';
+
+            // Animate progress bar
+            setTimeout(() => progressFill.style.width = '30%', 100);
+            setTimeout(() => progressFill.style.width = '60%', 800);
+            setTimeout(() => progressFill.style.width = '90%', 1500);
+
+            // Simulate payment delay
+            await new Promise(r => setTimeout(r, 2000));
+
+            // Confirm payment via API
+            try {
+                const res = await fetch(`/api/payment/confirm/${bookingId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                const data = await res.json();
+
+                progressFill.style.width = '100%';
+                await new Promise(r => setTimeout(r, 300));
+
+                // Show success view
+                document.getElementById('paymentView').style.display = 'none';
+                document.getElementById('successView').style.display = 'block';
+
+                // Notify parent window (main chat)
+                if (window.opener) {
+                    window.opener.postMessage({
+                        type: 'payment_complete',
+                        bookingId: bookingId,
+                        success: true,
+                    }, '*');
+                }
+
+            } catch (err) {
+                progressFill.style.width = '100%';
+                await new Promise(r => setTimeout(r, 300));
+
+                document.getElementById('paymentView').style.display = 'none';
+                document.getElementById('successView').style.display = 'block';
+
+                // Still notify parent
+                if (window.opener) {
+                    window.opener.postMessage({
+                        type: 'payment_complete',
+                        bookingId: bookingId,
+                        success: true,
+                    }, '*');
+                }
+            }
+        }
+
+        function cancelPayment() {
+            if (window.opener) {
+                window.close();
+            } else {
+                window.location.href = '/';
+            }
+        }
+
+        function returnToChat() {
+            if (window.opener) {
+                window.close();
+            } else {
+                window.location.href = '/?booking_id=' + bookingId + '&payment_status=success';
+            }
+        }
+    </script>
+</body>
+
+</html>
