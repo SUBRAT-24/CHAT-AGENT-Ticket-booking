@@ -31,7 +31,7 @@ class MuseumAgent:
             if settings.GOOGLE_API_KEY and settings.GOOGLE_API_KEY != "demo_key_replace_with_real":
                 import google.generativeai as genai
                 genai.configure(api_key=settings.GOOGLE_API_KEY)
-                self.model = genai.GenerativeModel('gemini-2.0-flash')
+                self.model = genai.GenerativeModel('gemini-1.5-flash')
                 self.llm_available = True
                 print("✅ Gemini LLM initialized successfully")
             else:
