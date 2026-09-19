@@ -2,10 +2,17 @@
 
 import asyncio
 import uuid
+import sys
+import os
 from datetime import datetime, timedelta
+
+# Ensure project root is in sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.core.config import settings
 from app.core.security import get_password_hash
+
 
 
 async def seed_database():
