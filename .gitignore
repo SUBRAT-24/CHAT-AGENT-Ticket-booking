@@ -1,0 +1,21 @@
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Environment files
+.env
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Vercel output
+.vercel/
+
+# OS generated files
+.DS_Store
+Thumbs.db
